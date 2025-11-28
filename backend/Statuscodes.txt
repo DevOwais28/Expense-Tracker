@@ -1,0 +1,17 @@
+| Code    | Meaning       | When to Use       |
+| ------- | ------------- | ----------------- |
+| **400** | Bad Request   | Wrong input       |
+| **401** | Unauthorized  | Login required    |
+| **403** | Forbidden     | No permission     |
+| **404** | Not Found     | Resource missing  |
+| **409** | Conflict      | Duplicate values  |
+| **422** | Unprocessable | Validation failed |
+| **429** | Rate Limit    | Too many requests |
+| **500** | Server Error  | Code issue        |
+
+| Code               | Meaning                 | When to Use               |
+| ------------------ | ----------------------- | ------------------------- |
+| **200 OK**         | Success                 | GET, PUT, DELETE (normal) |
+| **201 Created**    | Created successfully    | POST (expense, user)      |
+| **204 No Content** | Successful, no response | DELETE (optional)         |
+| **202 Accepted**   | Processing started      | Long-running tasks        |
