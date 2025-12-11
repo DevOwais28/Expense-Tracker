@@ -6,7 +6,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import r2_score
-import datetime as datetime
+from datetime import datetime
 import joblib
 
 data = pd.read_csv("backend/prediction/expense_data_1.csv")
@@ -74,8 +74,9 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 mse = mean_squared_error(y_test, y_pred)
 print("Mean Squared Error:", mse)
-print("r^2",r2_score)
+print("R^2:", r2_score(y_test, y_pred))
 
 # 1️⃣1️⃣ Save the trained model
-# joblib.dump(model, "expense_amount_model.pkl")
-# print("Model saved as expense_amount_model.pkl")
+
+joblib.dump(model, "backend/prediction/expense_amount_model.pkl")
+print("Model saved as expense_amount_model.pkl")
