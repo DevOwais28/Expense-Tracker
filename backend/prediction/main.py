@@ -5,13 +5,14 @@ from typing import List
 import joblib
 import pandas as pd
 import os
+import uvicorn  # <-- add this
 
 app = FastAPI()
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.getenv("CLIENT_URL", "http://localhost:5173"), "http://localhost:3000"],  # Frontend URLs
+    allow_origins=[os.getenv("CLIENT_URL", "http://localhost:5173"), "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
@@ -35,23 +36,22 @@ def root():
     return {"message": "Expense Prediction API Running"}
 
 
-# --------------------------
-# 🔥 Best Version — Handles Single and Multiple Together
-# --------------------------
 @app.post("/predict")
 def predict(expenses: List[ExpenseInput]):
-
-    # Convert list of Pydantic objects → DataFrame
     df = pd.DataFrame([e.dict() for e in expenses])
-
-    # Predict using your ML model
     predictions = model.predict(df)
-
-    # Convert to float because NumPy types cause issues in JSON
     output = [float(p) for p in predictions]
-
     return {"predictions": output}
+
 
 @app.options("/predict")
 def options_predict():
     return {"message": "CORS preflight successful"}
+
+
+# ---------------------------
+# Railway-compatible entry
+# ---------------------------
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))  # Railway sets this
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
