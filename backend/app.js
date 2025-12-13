@@ -77,15 +77,20 @@ app.use(upload.single('avatar'));
 // Serve static files from uploads directory
 app.use('/uploads', express.static('uploads'));
 
+// Fallback session store (memory-based for Railway debugging)
+const sessionStore = process.env.NODE_ENV === 'production' && process.env.MONGO_URI 
+  ? MongoStore.create({
+      mongoUrl: mongoURI,
+      collectionName: 'sessions',
+      ttl: 60 * 60 * 24
+    })
+  : undefined;
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'fallback-secret-key-for-development', 
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: mongoURI,
-    collectionName: 'sessions',
-    ttl: 60 * 60 * 24 // 1 day in seconds
-  }),
+  store: sessionStore,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24,
     httpOnly: true,
@@ -105,6 +110,33 @@ app.use(
 );
 
 app.use(express.urlencoded({ extended: true }));
+
+// Test MongoDB connection
+app.get('/test-db', async (req, res) => {
+  try {
+    const mongoose = await import('mongoose');
+    const state = mongoose.connection.readyState;
+    const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+    res.json({ 
+      status: states[state] || 'unknown',
+      readyState: state,
+      mongoURI: process.env.MONGO_URI ? 'SET' : 'MISSING'
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Debug environment variables
+app.get('/debug-env', (req, res) => {
+  res.json({ 
+    mongoURI: process.env.MONGO_URI ? 'SET' : 'MISSING',
+    sessionSecret: process.env.SESSION_SECRET ? 'SET' : 'MISSING',
+    googleClientId: process.env.GOOGLE_CLIENT_ID ? 'SET' : 'MISSING',
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET ? 'SET' : 'MISSING',
+    nodeEnv: process.env.NODE_ENV
+  });
+});
 
 // Health check endpoint - no dependencies
 app.get('/health', (req, res) => {
