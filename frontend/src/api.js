@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:4000/api/",
+    baseURL: "https://expense-tracker-production-2bb8.up.railway.app/api/",
     withCredentials: true,
 });
 
@@ -47,4 +47,5 @@ export const apiRequest = async (
       console.error(`API Error: ${method} ${url}`, error);
       throw error;
     }
+
 };
