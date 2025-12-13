@@ -7,8 +7,8 @@ import { apiRequest } from '../api'
 import toast from 'react-hot-toast'
 
 const CardShell = ({ children }) => (
-  <div className="flex min-h-[calc(100vh-7rem)] items-center justify-center px-4 sm:px-6 lg:px-8">
-    <div className="grid w-full max-w-4xl gap-6 sm:gap-8 rounded-2xl sm:rounded-3xl bg-slate-950/30 p-4 sm:p-5 lg:p-8 text-slate-50 shadow-2xl shadow-slate-900/60 ring-1 ring-white/15 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+  <div className="flex min-h-[calc(100vh-7rem)] items-center justify-center px-2 sm:px-4 lg:px-8">
+    <div className="grid w-full max-w-4xl gap-4 sm:gap-6 lg:gap-8 rounded-2xl sm:rounded-3xl bg-slate-950/30 p-3 sm:p-4 lg:p-6 text-slate-50 shadow-2xl shadow-slate-900/60 ring-1 ring-white/15 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
       {children}
     </div>
   </div>
@@ -97,7 +97,7 @@ const SignupPage = ({ onNavigateLogin, onNavigateLanding }) => {
 
   // Remove the useFormik hook since we're using Formik component
   async function continueWithGoogle() {
-    window.location.href = `${import.meta.env.VITE_API_URL || 'https://expense-tracker-production-2bb8.up.railway.app'}/api/users/auth/google`;
+    window.location.href = `${import.meta.env.PROD ? 'https://expense-tracker-production-2bb8.up.railway.app' : 'http://localhost:4000'}/api/users/auth/google`;
   }
 
 
@@ -140,16 +140,16 @@ const SignupPage = ({ onNavigateLogin, onNavigateLanding }) => {
         </ul>
       </div>
 
-      <div className="flex items-center justify-center px-2">
-        <div className="w-full max-w-md rounded-2xl bg-white/95 p-4 sm:p-5 text-slate-900 shadow-xl shadow-slate-900/30 ring-1 ring-slate-200">
+      <div className="flex items-center justify-center px-1 sm:px-2">
+        <div className="w-full max-w-sm sm:max-w-md rounded-2xl bg-white/95 p-3 sm:p-4 lg:p-5 text-slate-900 shadow-xl shadow-slate-900/30 ring-1 ring-slate-200">
           {formError && (
             <div className="mb-3 rounded-xl bg-red-50 px-3 py-2 text-xs text-red-600 ring-1 ring-red-200">
               {formError}
             </div>
           )}
 
-          <h3 className="mb-1 text-lg sm:text-lg font-semibold tracking-tight text-slate-900">Sign up</h3>
-          <p className="mb-3 sm:mb-4 text-xs text-slate-500">Enter your details or continue with Google/Apple.</p>
+          <h3 className="mb-2 text-base sm:text-lg font-semibold tracking-tight text-slate-900">Sign up</h3>
+          <p className="mb-2 sm:mb-3 text-xs text-slate-500">Enter your details or continue with Google/Apple.</p>
 
           <Formik
             initialValues={initialValues}
@@ -185,7 +185,7 @@ const SignupPage = ({ onNavigateLogin, onNavigateLanding }) => {
             }}
           >
             {({ isSubmitting }) => (
-              <Form className="space-y-3" noValidate>
+              <Form className="space-y-2 sm:space-y-3" noValidate>
                 <Field name="name" type="text" label="Name" component={FloatingInput} />
                 <Field name="email" type="email" label="Email" component={FloatingInput} />
                 <Field name="password" type="password" label="Password" component={FloatingInput} />
@@ -193,7 +193,7 @@ const SignupPage = ({ onNavigateLogin, onNavigateLanding }) => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="mt-1 w-full rounded-full bg-gradient-to-r from-indigo-600 to-violet-500 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-md shadow-indigo-700/40 transition hover:translate-y-px hover:shadow-lg hover:shadow-indigo-700/60 disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="mt-1 w-full rounded-full bg-gradient-to-r from-indigo-600 to-violet-500 px-3 py-2.5 sm:px-4 sm:py-3 text-xs sm:text-sm font-semibold text-white shadow-md shadow-indigo-700/40 transition hover:translate-y-px hover:shadow-lg hover:shadow-indigo-700/60 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? 'Creating...' : 'Create Account'}
                 </button>
@@ -227,4 +227,3 @@ const SignupPage = ({ onNavigateLogin, onNavigateLanding }) => {
 }
 
 export default SignupPage
-
