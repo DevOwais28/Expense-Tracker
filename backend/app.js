@@ -77,7 +77,7 @@ app.use(upload.single('avatar'));
 // Serve static files from uploads directory
 app.use('/uploads', express.static('uploads'));
 
-// Production session configuration
+// Cross-origin session configuration for Vercel-Railway
 app.use(session({
   secret: process.env.SESSION_SECRET || 'fallback-secret-key-for-development', 
   resave: false,
@@ -85,8 +85,8 @@ app.use(session({
   cookie: {
     maxAge: 1000 * 60 * 60 * 24,
     httpOnly: true,
-    sameSite: "lax",
-    secure: false
+    sameSite: "none",
+    secure: true
   }
 }));
 
