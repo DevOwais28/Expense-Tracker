@@ -298,7 +298,7 @@ const UserDashboard = () => {
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Recent Expenses</h2>
             <button
               onClick={() => setShowAddExpense(true)}
-              className="bg-blue-600 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl flex items-center gap-2 font-semibold hover:bg-blue-700 transition-all duration-300 shadow-sm text-sm sm:text-base">
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl flex items-center gap-2 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base text-white">
               <Plus className="w-4 h-4 sm:w-5 sm:h-5" /> Add Expense
             </button>
           </div>
