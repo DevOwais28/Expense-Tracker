@@ -90,7 +90,7 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24, // 1 day
     httpOnly: true,
     sameSite: "none",            // allows cross-site cookies
-    secure: process.env.NODE_ENV === "production" // must be true in prod (HTTPS)
+    secure:"false" // must be true in prod (HTTPS)
   }
 }));
 
@@ -168,6 +168,7 @@ app.get("/", (req, res) => {
 app.use(errorMiddleware);
 
 app.listen(port, () => console.log('Server is working on Port:' + port + ' in ' + envMode + ' Mode.'));
+
 
 
 
