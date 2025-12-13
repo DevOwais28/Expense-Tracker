@@ -78,21 +78,22 @@ app.use(upload.single('avatar'));
 app.use('/uploads', express.static('uploads'));
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'fallback-secret-key',
+  secret: process.env.SESSION_SECRET || 'fallback-secret-key-for-development', 
   resave: false,
-  saveUninitialized: false,      // important for security
+  saveUninitialized: false,
   store: MongoStore.create({
     mongoUrl: mongoURI,
     collectionName: 'sessions',
-    ttl: 60 * 60 * 24            // 1 day
+    ttl: 60 * 60 * 24 // 1 day in seconds
   }),
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24, // 1 day
+    maxAge: 1000 * 60 * 60 * 24,
     httpOnly: true,
-    sameSite: "none",            // allows cross-site cookies
-    secure:"false" // must be true in prod (HTTPS)
+    sameSite: "none",
+    secure: true
   }
 }));
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -168,6 +169,7 @@ app.get("/", (req, res) => {
 app.use(errorMiddleware);
 
 app.listen(port, () => console.log('Server is working on Port:' + port + ' in ' + envMode + ' Mode.'));
+
 
 
 
