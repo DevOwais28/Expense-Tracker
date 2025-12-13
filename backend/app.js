@@ -77,28 +77,23 @@ app.use(upload.single('avatar'));
 // Serve static files from uploads directory
 app.use('/uploads', express.static('uploads'));
 
-// Minimal session configuration for debugging
+// Production session configuration
 app.use(session({
-  secret: 'debug-secret',
+  secret: process.env.SESSION_SECRET || 'fallback-secret-key-for-development', 
   resave: false,
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24,
     httpOnly: true,
-    sameSite: "none",
-    secure: true
+    sameSite: "lax",
+    secure: false
   }
 }));
 
+// Re-enable passport configuration
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(
-  helmet({
-    contentSecurityPolicy: false, // Disable CSP for now
-    crossOriginEmbedderPolicy: false, // Disable this too
-  })
-);
 
 app.use(express.urlencoded({ extended: true }));
 
