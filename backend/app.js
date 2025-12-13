@@ -159,30 +159,14 @@ app.get('/test-session', (req, res) => {
   console.log('req.isAuthenticated():', req.isAuthenticated && req.isAuthenticated());
   console.log('========================');
   
-  // Test MongoDB session store connection
-  const MongoStore = require('connect-mongo');
-  const store = MongoStore.create({
-    mongoUrl: mongoURI,
-    collectionName: 'sessions'
-  });
-  
-  store.get(req.sessionID, (err, session) => {
-    if (err) {
-      console.log('Store error:', err);
-      return res.status(500).json({ error: 'Store error' });
-    }
-    
-    console.log('Session from store:', session);
-    
-    res.json({ 
-      sessionId: req.sessionID,
-      sessionData: req.session,
-      hasUserId: !!req.session.userId,
-      hasPassport: !!req.session.passport,
-      hasUser: !!req.user,
-      isAuthenticated: req.isAuthenticated && req.isAuthenticated(),
-      storeSession: session ? 'found' : 'not found'
-    });
+  res.json({ 
+    sessionId: req.sessionID,
+    sessionData: req.session,
+    hasUserId: !!req.session.userId,
+    hasPassport: !!req.session.passport,
+    hasUser: !!req.user,
+    isAuthenticated: req.isAuthenticated && req.isAuthenticated(),
+    cookies: req.headers.cookie
   });
 });
 
