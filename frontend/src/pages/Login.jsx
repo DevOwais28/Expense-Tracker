@@ -241,13 +241,15 @@ const LoginPage = ({ onNavigateSignup, onNavigateLanding, onLoginSuccess }) => {
               </div>
               <p className="mt-6 text-center text-sm text-slate-400">
                 Don&apos;t have an account?{' '}
-                <button
-                  type="button"
-                  onClick={onNavigateSignup}
-                  className="font-semibold text-teal-400 hover:text-teal-300 transition-colors"
-                >
-                  Sign up
-                </button>
+               <Link to="/signup">
+                  <button
+                    type="button"
+                    onClick={onNavigateSignup}
+                    className="font-semibold text-teal-400 hover:text-teal-300 transition-colors"
+                  >
+                    Sign up
+                  </button>
+                </Link>
               </p>
               <p className="mt-2 text-center text-sm text-slate-400">
                 <Link
@@ -266,3 +268,4 @@ const LoginPage = ({ onNavigateSignup, onNavigateLanding, onLoginSuccess }) => {
 }
 
 export default LoginPage
+
