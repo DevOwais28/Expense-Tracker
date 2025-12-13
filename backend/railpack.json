@@ -1,0 +1,4 @@
+{
+  "builder": "node",
+  "start": "node app.js"
+}
