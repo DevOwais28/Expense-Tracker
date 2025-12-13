@@ -90,8 +90,7 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24,
     httpOnly: true,
     sameSite: "none",
-    secure: true,
-    domain: process.env.NODE_ENV === 'production' ? '.railway.app' : undefined
+    secure: true
   }
 }));
 
@@ -107,8 +106,17 @@ app.use(
 
 app.use(express.urlencoded({ extended: true }));
 
+// Health check endpoint - no dependencies
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV,
+    port: port
+  });
+});
 
-// Remove duplicate route handler - keeping the one below
+// Remove duplicate route handler - keeping the final one
 
 // Test session endpoint
 app.get('/test-session', (req, res) => {
