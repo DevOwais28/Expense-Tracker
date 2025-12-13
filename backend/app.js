@@ -77,16 +77,18 @@ app.use(upload.single('avatar'));
 // Serve static files from uploads directory
 app.use('/uploads', express.static('uploads'));
 
-// Cross-origin session configuration for Vercel-Railway
+// Production session configuration with proxy support
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'fallback-secret-key-for-development', 
+  secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false,
+  saveUninitialized: true,
+  proxy: true, // Required for Railway & cross-origin requests
+  name: 'expenseTrackerCookie', // Unique cookie name
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24,
-    httpOnly: true,
-    sameSite: "none",
-    secure: true
+    secure: true, // Required for HTTPS
+    httpOnly: false, // Allow frontend access
+    sameSite: 'none',
+    maxAge: 1000 * 60 * 60 * 24
   }
 }));
 
