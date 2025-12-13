@@ -23,7 +23,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 export const envMode = process.env.NODE_ENV?.trim() || 'DEVELOPMENT';
-const port = process.env.PORT || 4000;
+const port = process.env.PORT;
 
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/expense-tracker';
 
@@ -165,3 +165,4 @@ app.use("/api/admin",adminRoutes)
 app.use(errorMiddleware);
 
 app.listen(port, () => console.log('Server is working on Port:' + port + ' in ' + envMode + ' Mode.'));
+
