@@ -122,7 +122,7 @@ const LoginPage = ({ onNavigateSignup, onNavigateLanding, onLoginSuccess }) => {
     });
 
   async function continueWithGoogle() {
-    window.location.href = `${import.meta.env.VITE_API_URL || 'http://localhost:4000'}/api/users/auth/google`;
+    window.location.href = `${import.meta.env.VITE_API_URL || 'https://expense-tracker-production-2bb8.up.railway.app'}/api/users/auth/google`;
   }
   return (
     <CardShell>
@@ -266,3 +266,4 @@ const LoginPage = ({ onNavigateSignup, onNavigateLanding, onLoginSuccess }) => {
 }
 
 export default LoginPage
+
