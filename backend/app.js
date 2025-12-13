@@ -23,7 +23,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 export const envMode = process.env.NODE_ENV?.trim() || 'DEVELOPMENT';
-const port = process.env.PORT;
+const port = process.env.PORT || 4000;
 
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/expense-tracker';
 
@@ -39,7 +39,7 @@ const app = express();
 
 // CORS middleware first
 app.use(cors({
-  origin: "https://expense-tracker-glpp.vercel.app",
+  origin: ['https://expense-tracker-glpp.vercel.app', 'http://localhost:5173'],
   credentials: true
 }));
 
@@ -90,10 +90,10 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24,
     httpOnly: true,
     sameSite: "none",
-    secure: true
+    secure: true,
+    domain: process.env.NODE_ENV === 'production' ? '.railway.app' : undefined
   }
 }));
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -108,9 +108,7 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 
 
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
+// Remove duplicate route handler - keeping the one below
 
 // Test session endpoint
 app.get('/test-session', (req, res) => {
@@ -162,19 +160,7 @@ app.use("/api/admin",adminRoutes)
 //     message: "Page not found",
 //   });
 // });
-app.get("/", (req, res) => {
-  res.status(200).send("Server running 🚀");
-});
 
 app.use(errorMiddleware);
 
 app.listen(port, () => console.log('Server is working on Port:' + port + ' in ' + envMode + ' Mode.'));
-
-
-
-
-
-
-
-
-
