@@ -78,19 +78,19 @@ app.use(upload.single('avatar'));
 app.use('/uploads', express.static('uploads'));
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'fallback-secret-key-for-development', 
+  secret: process.env.SESSION_SECRET || 'fallback-secret-key',
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,      // important for security
   store: MongoStore.create({
     mongoUrl: mongoURI,
     collectionName: 'sessions',
-    ttl: 60 * 60 * 24 // 1 day in seconds
+    ttl: 60 * 60 * 24            // 1 day
   }),
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24,
+    maxAge: 1000 * 60 * 60 * 24, // 1 day
     httpOnly: true,
-    sameSite: "none",
-    secure: true
+    sameSite: "none",            // allows cross-site cookies
+    secure: process.env.NODE_ENV === "production" // must be true in prod (HTTPS)
   }
 }));
 
@@ -168,6 +168,7 @@ app.get("/", (req, res) => {
 app.use(errorMiddleware);
 
 app.listen(port, () => console.log('Server is working on Port:' + port + ' in ' + envMode + ' Mode.'));
+
 
 
 
