@@ -1,9 +1,12 @@
-import { Expense } from "../models/expense";
+import { Expense } from "../models/expense.js";
 
 const createExpense = async (req, res) => {
     try {
+        console.log('Creating expense with data:', req.body);
+        console.log('User ID:', req.session.userId || (req.user && req.user._id));
+        
         const { title, amount, category, paymentMethod, date } = req.body
-
+        
         if (!title) {
             return res.status(400).json({
                 success: false,
@@ -18,23 +21,29 @@ const createExpense = async (req, res) => {
             });
         }
 
-        if (!req.session._id) {
+        // Check for both session-based and passport-based authentication
+        const userId = req.session.userId || (req.user && req.user._id);
+        
+        if (!userId) {
             return res.status(401).json({
                 success: false,
                 message: "login to continue"
             });
         }
+        
         const newExpense = new Expense({
-            userId: req.session._id,
+            userId: userId,
             title,
             amount,
             category,
-            paymentMethod,
+            paymentMethod: paymentMethod || 'cash',
             date
-        })
+        });
 
-        await newExpense.validate()
-        await newExpense.save()
+        console.log('Saving expense:', newExpense);
+        await newExpense.validate();
+        await newExpense.save();
+        console.log('Expense saved successfully');
 
         return res.status(201).json({
             success: true,
@@ -42,6 +51,7 @@ const createExpense = async (req, res) => {
             newExpense
         })
     } catch (err) {
+        console.error('Error creating expense:', err);
         return res.status(500).json({
             success: false,
             message: "Internal server error",
@@ -63,7 +73,10 @@ const deleteExpense = async (req, res) => {
             })
         }
 
-        if (req.session.role !== "admin" && expense.userId.toString() !== req.session._id) {
+        const userId = req.session.userId || (req.user && req.user._id);
+        const userRole = req.session.role || (req.user && req.user.role);
+        
+        if (userRole !== "admin" && expense.userId.toString() !== userId.toString()) {
             return res.status(403).json({ success: false, message: "Forbidden" });
         }
 
@@ -96,7 +109,10 @@ const editExpense = async (req, res) => {
             });
         }
 
-        if (req.session.role !== "admin" && expense.userId.toString() !== req.session._id) {
+        const userId = req.session.userId || (req.user && req.user._id);
+        const userRole = req.session.role || (req.user && req.user.role);
+        
+        if (userRole !== "admin" && expense.userId.toString() !== userId.toString()) {
             return res.status(403).json({ success: false, message: "Forbidden" });
         }
 
@@ -125,19 +141,22 @@ const editExpense = async (req, res) => {
 
 const getExpense = async (req, res) => {
     try {
-        if (!req.session._id) {
+        const userId = req.session.userId || (req.user && req.user._id);
+        
+        if (!userId) {
             return res.status(401).json({
                 success: false,
                 message: "login to continue"
             });
         }
-        const myExpense = await Expense.find({ userId: req.session._id })
+        const myExpense = await Expense.find({ userId: userId })
         return res.status(200).json({
             success: true,
             message: "Expense fetched Successfully",
             myExpense
         })
     } catch (err) {
+        console.error('Error in getExpense:', err);
         return res.status(500).json({
             success: false,
             message: "Internal server error",
@@ -148,7 +167,9 @@ const getExpense = async (req, res) => {
 
 const getAllExpenses = async (req, res) => {
     try {
-        if (req.session.role !== "admin") {
+        const userRole = req.session.role || (req.user && req.user.role);
+        
+        if (userRole !== "admin") {
             return res.status(403).json({
                 success: false,
                 message: "Access denied. Admins only."

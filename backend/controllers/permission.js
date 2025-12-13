@@ -1,5 +1,5 @@
-import { User } from "./models/user.js";
-import { Permission } from "./models/permission.js";   
+import { User } from "../models/user.js";
+import { Permission } from "../models/permission.js";   
 
 export const assignPermissions = async (role ,_id) => {
     const user = await User.findById(_id);

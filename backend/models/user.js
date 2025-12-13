@@ -14,6 +14,8 @@ const userSchema = new mongoose.Schema({
       ref: "Permission",
     }],
     avatar: {type :String , default:""} , // optional: show on dashboard
+    resetPasswordToken: { type: String, default: undefined },
+    resetPasswordExpires: { type: Date, default: undefined },
     createdAt: { type: Date, default: Date.now }
 });
 
