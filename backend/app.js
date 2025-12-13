@@ -77,20 +77,11 @@ app.use(upload.single('avatar'));
 // Serve static files from uploads directory
 app.use('/uploads', express.static('uploads'));
 
-// Fallback session store (memory-based for Railway debugging)
-const sessionStore = process.env.NODE_ENV === 'production' && process.env.MONGO_URI 
-  ? MongoStore.create({
-      mongoUrl: mongoURI,
-      collectionName: 'sessions',
-      ttl: 60 * 60 * 24
-    })
-  : undefined;
-
+// Minimal session configuration for debugging
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'fallback-secret-key-for-development', 
+  secret: 'debug-secret',
   resave: false,
   saveUninitialized: false,
-  store: sessionStore,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24,
     httpOnly: true,
@@ -110,6 +101,17 @@ app.use(
 );
 
 app.use(express.urlencoded({ extended: true }));
+
+// Simple session test (no dependencies)
+app.get('/simple-session', (req, res) => {
+  req.session.test = 'working';
+  res.json({ 
+    sessionId: req.sessionID,
+    sessionData: req.session,
+    cookies: req.headers.cookie,
+    working: true
+  });
+});
 
 // Test MongoDB connection
 app.get('/test-db', async (req, res) => {
