@@ -39,7 +39,7 @@ const app = express();
 
 // CORS middleware first
 app.use(cors({
-  origin: 'http://localhost:5173' || process.env.CLIENT_URL,
+  origin: "https://expense-tracker-glpp.vercel.app/" || process.env.CLIENT_URL,
   credentials: true
 }));
 
@@ -168,5 +168,6 @@ app.get("/", (req, res) => {
 app.use(errorMiddleware);
 
 app.listen(port, () => console.log('Server is working on Port:' + port + ' in ' + envMode + ' Mode.'));
+
 
 
