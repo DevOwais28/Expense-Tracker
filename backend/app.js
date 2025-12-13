@@ -161,8 +161,12 @@ app.use("/api/admin",adminRoutes)
 //     message: "Page not found",
 //   });
 // });
+app.get("/", (req, res) => {
+  res.status(200).send("Server running 🚀");
+});
 
 app.use(errorMiddleware);
 
 app.listen(port, () => console.log('Server is working on Port:' + port + ' in ' + envMode + ' Mode.'));
+
 
