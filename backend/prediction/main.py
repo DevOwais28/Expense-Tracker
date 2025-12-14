@@ -19,7 +19,7 @@ app.add_middleware(
 )
 
 # Load trained model
-model_path = os.path.join(os.getcwd(), "backend", "prediction", "expense_amount_model.pkl")
+model_path = "expense_amount_model.pkl"
 model = joblib.load(model_path)
 # Input schema
 class ExpenseInput(BaseModel):
@@ -34,9 +34,17 @@ def root():
     return {"message": "Expense Prediction API Running"}
 
 @app.post("/predict")
-def predict(expenses: List[ExpenseInput]):
+def predict(expenses):
+    # Handle both single object and list
+    if isinstance(expenses, dict):
+        expenses = [expenses]
+    elif not isinstance(expenses, list):
+        expenses = [expenses.dict()]
+    else:
+        expenses = [e.dict() if hasattr(e, 'dict') else e for e in expenses]
+    
     # Convert input to DataFrame
-    df = pd.DataFrame([e.dict() for e in expenses])
+    df = pd.DataFrame(expenses)
     # Lowercase to match training
     df["category"] = df["category"].str.lower()
     df["paymentMethod"] = df["paymentMethod"].str.lower()
