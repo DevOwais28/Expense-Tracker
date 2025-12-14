@@ -91,20 +91,35 @@ const UserDashboard = () => {
         return;
       }
 
-      // Prepare data for prediction - simulate next month expenses
+      // Prepare data for monthly prediction - aggregate expenses by category
       const nextMonth = new Date();
       nextMonth.setMonth(nextMonth.getMonth() + 1);
       
-      const predictionData = expenses.slice(-5).map((expense, index) => {
-        // Generate varied dates throughout next month
-        const predictionDate = new Date(nextMonth.getFullYear(), nextMonth.getMonth(), Math.floor(Math.random() * 28) + 1);
+      // Aggregate expenses by category for monthly prediction
+      const categoryTotals = expenses.reduce((acc, expense) => {
+        const category = expense.category.toLowerCase();
+        if (!acc[category]) {
+          acc[category] = {
+            category: category,
+            totalAmount: 0,
+            count: 0,
+            paymentMethod: expense.paymentMethod || 'cash'
+          };
+        }
+        acc[category].totalAmount += Number(expense.amount);
+        acc[category].count += 1;
+        return acc;
+      }, {});
+      
+      // Create monthly prediction data for each category
+      const predictionData = Object.values(categoryTotals).map(categoryData => {
         return {
-          title: expense.title,
-          category: expense.category,
-          paymentMethod: expense.paymentMethod || 'cash',
-          year: predictionDate.getFullYear(),
-          month: predictionDate.getMonth() + 1,
-          day: predictionDate.getDate()
+          title: `Monthly ${categoryData.category}`,
+          category: categoryData.category,
+          paymentMethod: categoryData.paymentMethod,
+          year: nextMonth.getFullYear(),
+          month: nextMonth.getMonth() + 1,
+          day: 15 // Use middle of month for consistency
         };
       });
 
@@ -193,9 +208,10 @@ const UserDashboard = () => {
       ? Object.entries(categoryTotals).sort((a, b) => b[1] - a[1])[0][0]
       : "No Category Yet";
 
-  // Calculate total predicted amount
+  // Calculate monthly predictions - predictions now represent monthly amounts per category
   const totalPredictedAmount = predictions.reduce((sum, pred) => sum + pred, 0);
   const averagePrediction = predictions.length > 0 ? totalPredictedAmount / predictions.length : 0;
+  const monthlyForecast = totalPredictedAmount; // Direct monthly total
 
   return (
     <div className="bg-gray-50 min-h-screen text-gray-900 overflow-x-hidden">
@@ -279,9 +295,9 @@ const UserDashboard = () => {
                 </div>
               </div>
               <p className="text-3xl font-bold text-white">
-                ${averagePrediction.toFixed(2)}
+                ${monthlyForecast.toFixed(2)}
               </p>
-              <p className="text-sm text-white/80 mt-2">Next expense prediction</p>
+              <p className="text-sm text-white/80 mt-2">Next month forecast</p>
               {predictionLoading ? (
                 <p className="text-xs text-white/60 mt-1">Calculating...</p>
               ) : predictions.length > 0 ? (
@@ -447,7 +463,7 @@ const UserDashboard = () => {
                   <div className="bg-white rounded-lg p-4 border border-purple-200">
                     <h3 className="text-sm font-semibold text-gray-700 mb-2">Next Month Forecast</h3>
                     <p className="text-2xl font-bold text-purple-600">
-                      ${totalPredictedAmount.toFixed(2)}
+                      ${monthlyForecast.toFixed(2)}
                     </p>
                     <p className="text-xs text-gray-500 mt-1">
                       Total predicted spending
