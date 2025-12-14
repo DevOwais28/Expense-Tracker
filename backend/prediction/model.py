@@ -1,27 +1,28 @@
-<<<<<<< HEAD
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import r2_score
+from sklearn.metrics import mean_squared_error, r2_score
 from datetime import datetime
 import joblib
+import os
 
+# Load data
 data = pd.read_csv("backend/prediction/expense_data_1.csv")
 
-data = data[["Account","Category","Amount","Date","Income/Expense","Note","Account.1"]].copy()
+# Select relevant columns
+data = data[["Category","Amount","Date","Account.1"]].copy()
 
-data["title"] = data["Note"].fillna(data["Account"])
-
+# Convert amount to numeric
 data["amount"] = pd.to_numeric(data["Amount"], errors="coerce").fillna(0)
 
+# Category mapping
 allowed_categories = ["food", "travel", "bills", "shopping", "health", "entertainment", "other"]
-
 data["category"] = data["Category"].str.lower().apply(lambda x: x if x in allowed_categories else "other")
 
+# Payment method mapping
 payment_map = {
     "bank": "bank",
     "card": "card",
@@ -29,139 +30,42 @@ payment_map = {
     "easypaisa": "easypaisa",
 }
 data["paymentMethod"] = data["Account.1"].astype(str).str.lower().map(payment_map).fillna("cash")
+
+# Convert date to numerical features
 data["date"] = pd.to_datetime(data["Date"], errors="coerce").fillna(datetime.now())
-data = data[["title", "amount", "category", "paymentMethod", "date"]].copy()
-
-# 3️⃣ Fill missing values if any
-data["title"] = data["title"].fillna("unknown")
-data["category"] = data["category"].fillna("other")
-data["paymentMethod"] = data["paymentMethod"].fillna("cash")
-data["date"] = pd.to_datetime(data["date"])
-
-# 4️⃣ Feature engineering
-# Convert date to numerical features (year, month, day)
 data["year"] = data["date"].dt.year
 data["month"] = data["date"].dt.month
 data["day"] = data["date"].dt.day
+data = data[["category", "paymentMethod", "year", "month", "day", "amount"]]
 
-# Drop original date
-data = data.drop("date", axis=1)
-
-# 5️⃣ Define X and y
+# Define X and y
 X = data.drop("amount", axis=1)
 y = data["amount"]
 
-# 6️⃣ Preprocessing for categorical features
-categorical_features = ["title", "category", "paymentMethod"]
+# Preprocessing for categorical features
+categorical_features = ["category", "paymentMethod"]
 preprocessor = ColumnTransformer(
-    transformers=[
-        ("cat", OneHotEncoder(handle_unknown="ignore"), categorical_features)
-    ]
+    transformers=[("cat", OneHotEncoder(handle_unknown="ignore"), categorical_features)]
 )
 
-# 7️⃣ Create pipeline with regressor
-model = Pipeline(steps=[
+# Pipeline with RandomForest
+model = Pipeline([
     ("preprocessor", preprocessor),
     ("regressor", RandomForestRegressor(n_estimators=100, random_state=42))
 ])
 
-# 8️⃣ Train-test split
+# Train-test split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# 9️⃣ Fit the model
+# Fit model
 model.fit(X_train, y_train)
 
-# 1️⃣0️⃣ Predict and evaluate
+# Evaluate
 y_pred = model.predict(X_test)
-mse = mean_squared_error(y_test, y_pred)
-print("Mean Squared Error:", mse)
+print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
 print("R^2:", r2_score(y_test, y_pred))
 
-# 1️⃣1️⃣ Save the trained model
-
+# Save model
+os.makedirs("backend/prediction", exist_ok=True)
 joblib.dump(model, "backend/prediction/expense_amount_model.pkl")
 print("Model saved as expense_amount_model.pkl")
-=======
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import r2_score
-from datetime import datetime
-import joblib
-
-data = pd.read_csv("backend/prediction/expense_data_1.csv")
-
-data = data[["Account","Category","Amount","Date","Income/Expense","Note","Account.1"]].copy()
-
-data["title"] = data["Note"].fillna(data["Account"])
-
-data["amount"] = pd.to_numeric(data["Amount"], errors="coerce").fillna(0)
-
-allowed_categories = ["food", "travel", "bills", "shopping", "health", "entertainment", "other"]
-
-data["category"] = data["Category"].str.lower().apply(lambda x: x if x in allowed_categories else "other")
-
-payment_map = {
-    "bank": "bank",
-    "card": "card",
-    "jazzcash": "jazzcash",
-    "easypaisa": "easypaisa",
-}
-data["paymentMethod"] = data["Account.1"].astype(str).str.lower().map(payment_map).fillna("cash")
-data["date"] = pd.to_datetime(data["Date"], errors="coerce").fillna(datetime.now())
-data = data[["title", "amount", "category", "paymentMethod", "date"]].copy()
-
-# 3️⃣ Fill missing values if any
-data["title"] = data["title"].fillna("unknown")
-data["category"] = data["category"].fillna("other")
-data["paymentMethod"] = data["paymentMethod"].fillna("cash")
-data["date"] = pd.to_datetime(data["date"])
-
-# 4️⃣ Feature engineering
-# Convert date to numerical features (year, month, day)
-data["year"] = data["date"].dt.year
-data["month"] = data["date"].dt.month
-data["day"] = data["date"].dt.day
-
-# Drop original date
-data = data.drop("date", axis=1)
-
-# 5️⃣ Define X and y
-X = data.drop("amount", axis=1)
-y = data["amount"]
-
-# 6️⃣ Preprocessing for categorical features
-categorical_features = ["title", "category", "paymentMethod"]
-preprocessor = ColumnTransformer(
-    transformers=[
-        ("cat", OneHotEncoder(handle_unknown="ignore"), categorical_features)
-    ]
-)
-
-# 7️⃣ Create pipeline with regressor
-model = Pipeline(steps=[
-    ("preprocessor", preprocessor),
-    ("regressor", RandomForestRegressor(n_estimators=100, random_state=42))
-])
-
-# 8️⃣ Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# 9️⃣ Fit the model
-model.fit(X_train, y_train)
-
-# 1️⃣0️⃣ Predict and evaluate
-y_pred = model.predict(X_test)
-mse = mean_squared_error(y_test, y_pred)
-print("Mean Squared Error:", mse)
-print("R^2:", r2_score(y_test, y_pred))
-
-# 1️⃣1️⃣ Save the trained model
-
-joblib.dump(model, "backend/prediction/expense_amount_model.pkl")
-print("Model saved as expense_amount_model.pkl")
->>>>>>> aa1b4b4 (happy)
