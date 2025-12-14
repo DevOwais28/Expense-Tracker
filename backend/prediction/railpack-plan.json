@@ -1,5 +1,5 @@
 {
-  "python": "3.12",
+  "python": "system",
   "install": {
     "packages": "requirements.txt"
   },
