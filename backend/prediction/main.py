@@ -12,7 +12,7 @@ app = FastAPI()
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[os.getenv("CLIENT_URL", "http://localhost:5173"), "http://localhost:3000"],
+    allow_origins=[os.getenv("CLIENT_URL", "https://expense-tracker-glpp.vercel.app"), "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
