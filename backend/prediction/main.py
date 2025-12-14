@@ -34,8 +34,9 @@ def root():
     return {"message": "Expense Prediction API Running"}
 
 @app.post("/predict")
-def predict(expenses):
+async def predict(request: dict):
     # Handle both single object and list
+    expenses = request
     if isinstance(expenses, dict):
         expenses = [expenses]
     elif not isinstance(expenses, list):
