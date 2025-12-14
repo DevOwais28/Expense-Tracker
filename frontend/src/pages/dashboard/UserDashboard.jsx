@@ -91,17 +91,20 @@ const UserDashboard = () => {
         return;
       }
 
-      // Prepare data for prediction
-      const currentDate = new Date();
-      const predictionData = expenses.map(expense => {
-        const expenseDate = new Date(expense.date);
+      // Prepare data for prediction - simulate next month expenses
+      const nextMonth = new Date();
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
+      
+      const predictionData = expenses.slice(-5).map((expense, index) => {
+        // Generate varied dates throughout next month
+        const predictionDate = new Date(nextMonth.getFullYear(), nextMonth.getMonth(), Math.floor(Math.random() * 28) + 1);
         return {
           title: expense.title,
           category: expense.category,
           paymentMethod: expense.paymentMethod || 'cash',
-          year: currentDate.getFullYear(),
-          month: currentDate.getMonth() + 1,
-          day: currentDate.getDate()
+          year: predictionDate.getFullYear(),
+          month: predictionDate.getMonth() + 1,
+          day: predictionDate.getDate()
         };
       });
 
