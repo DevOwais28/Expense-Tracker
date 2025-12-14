@@ -111,12 +111,13 @@ const UserDashboard = () => {
         return acc;
       }, {});
       
-      // Create monthly prediction data for each category
+      // Create monthly prediction data for each category with actual spending amounts
       const predictionData = Object.values(categoryTotals).map(categoryData => {
         return {
-          title: `Monthly ${categoryData.category}`,
+          title: `Monthly ${categoryData.category} - $${categoryData.totalAmount}`,
           category: categoryData.category,
           paymentMethod: categoryData.paymentMethod,
+          currentAmount: categoryData.totalAmount, // Send actual spending amount
           year: nextMonth.getFullYear(),
           month: nextMonth.getMonth() + 1,
           day: 15 // Use middle of month for consistency
