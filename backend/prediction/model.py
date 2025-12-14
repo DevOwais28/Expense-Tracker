@@ -10,7 +10,7 @@ import joblib
 import os
 
 # Load data
-data = pd.read_csv("backend/prediction/expense_data_1.csv")
+data = pd.read_csv("expense_data_1.csv")
 
 # Select relevant columns
 data = data[["Category","Amount","Date","Account.1"]].copy()
@@ -66,6 +66,6 @@ print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
 print("R^2:", r2_score(y_test, y_pred))
 
 # Save model
-os.makedirs("backend/prediction", exist_ok=True)
-joblib.dump(model, "backend/prediction/expense_amount_model.pkl")
+os.makedirs(".", exist_ok=True)
+joblib.dump(model, "expense_amount_model.pkl")
 print("Model saved as expense_amount_model.pkl")
