@@ -19,9 +19,8 @@ app.add_middleware(
 )
 
 # Load trained model
-model_path = os.path.join(os.path.dirname(__file__), "backend/prediction/expense_amount_model.pkl")
+model_path = os.path.join(os.getcwd(), "backend", "prediction", "expense_amount_model.pkl")
 model = joblib.load(model_path)
-
 # Input schema
 class ExpenseInput(BaseModel):
     category: str
