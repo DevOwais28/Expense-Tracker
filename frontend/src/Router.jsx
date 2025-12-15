@@ -16,11 +16,15 @@ import PageNotFound from './pages/PageNotFound';
 const Router = () => {
   const navigate = useNavigate();
 
+  const handleGetStarted = () => {
+    navigate('/signup');
+  };
+
   return (
     <Routes>
       {/* Public routes with MainLayout */}
       <Route path="/" element={<MainLayout />}>
-        <Route index element={<LandingPage onGetStarted={() => console.log('Get Started clicked')} />} />
+        <Route index element={<LandingPage onGetStarted={handleGetStarted} />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="signup" element={<SignupPage onNavigateLogin={() => navigate('/login')} onNavigateLanding={() => navigate('/')} />} />
       </Route>
