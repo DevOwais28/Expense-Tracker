@@ -57,16 +57,45 @@ const AdminDashboard = () => {
   };
 
   const handleDelete = async (userId) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      try {
-        await apiRequest('DELETE', `admin/users/${userId}`);
-        toast.success('User deleted successfully');
-        // Refresh the users list
-        fetchUsers();
-      } catch (error) {
-        console.error('Error deleting user:', error);
-        toast.error(error.message || 'Failed to delete user');
-      }
+    const user = users.find(u => u.id === userId);
+    
+    // Show confirmation toast with action buttons
+    toast((t) => (
+      <div className="flex flex-col gap-2">
+        <p className="font-medium">Are you sure you want to delete {user.name}?</p>
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              toast.dismiss(t.id);
+              performDelete(userId);
+            }}
+            className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-3 py-1 bg-gray-300 text-gray-700 rounded text-sm hover:bg-gray-400"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: 10000,
+      position: 'top-center'
+    });
+  };
+
+  const performDelete = async (userId) => {
+    try {
+      await apiRequest('DELETE', `admin/users/${userId}`);
+      toast.success('User deleted successfully');
+      // Refresh the users list
+      fetchUsers();
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error(error.message || 'Failed to delete user');
     }
   };
 
