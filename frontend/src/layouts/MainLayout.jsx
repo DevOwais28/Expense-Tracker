@@ -34,9 +34,9 @@ const MainLayout = () => {
           <span className="ml-1 text-xl font-semibold tracking-tight cursor-pointer select-none" onClick={() => navigate("/")}>ExpenseAI</span>
         </div>
         <div className="hidden md:flex items-center gap-6">
-          <Link to="/#features" className="transition hover:text-teal-300 font-medium">Features</Link>
-          <Link to="/#how-it-works" className="transition hover:text-teal-300 font-medium">How It Works</Link>
-          <Link to="/#testimonials" className="transition hover:text-teal-300 font-medium">Testimonials</Link>
+          <a href="#features" className="transition hover:text-teal-300 font-medium">Features</a>
+          <a href="#how-it-works" className="transition hover:text-teal-300 font-medium">How It Works</a>
+          <a href="#testimonials" className="transition hover:text-teal-300 font-medium">Testimonials</a>
         </div>
         <div className="hidden md:flex items-center gap-2 ml-6">
           <button className="px-4 py-1.5 rounded-lg font-medium text-slate-100 hover:text-teal-300 transition" onClick={() => navigate("/login")}>Login</button>
@@ -51,9 +51,9 @@ const MainLayout = () => {
         </div>
         {menuOpen && (
           <div className="absolute top-full left-0 right-0 z-50 mt-2 flex flex-col rounded-xl border border-white/20 bg-slate-900/95 py-4 px-6 shadow-xl md:hidden animate-fade-in">
-            <Link to="/#features" className="mb-2 w-full text-left py-2 px-2 rounded hover:bg-teal-900/30 transition font-medium" onClick={() => setMenuOpen(false)}>Features</Link>
-            <Link to="/#how-it-works" className="mb-2 w-full text-left py-2 px-2 rounded hover:bg-teal-900/30 transition font-medium" onClick={() => setMenuOpen(false)}>How It Works</Link>
-            <Link to="/#testimonials" className="mb-2 w-full text-left py-2 px-2 rounded hover:bg-teal-900/30 transition font-medium" onClick={() => setMenuOpen(false)}>Testimonials</Link>
+            <a href="#features" className="mb-2 w-full text-left py-2 px-2 rounded hover:bg-teal-900/30 transition font-medium" onClick={() => setMenuOpen(false)}>Features</a>
+            <a href="#how-it-works" className="mb-2 w-full text-left py-2 px-2 rounded hover:bg-teal-900/30 transition font-medium" onClick={() => setMenuOpen(false)}>How It Works</a>
+            <a href="#testimonials" className="mb-2 w-full text-left py-2 px-2 rounded hover:bg-teal-900/30 transition font-medium" onClick={() => setMenuOpen(false)}>Testimonials</a>
             <button className="mb-2 w-full text-left py-2 px-2 rounded hover:bg-slate-800/50 transition font-medium text-slate-100" onClick={() => { setMenuOpen(false); navigate("/login"); }}>Login</button>
             <button className="w-full text-left py-2 px-2 rounded bg-gradient-to-r from-yellow-300 to-emerald-400 text-slate-900 font-semibold shadow hover:from-yellow-200 hover:to-emerald-300 transition" onClick={() => { setMenuOpen(false); navigate("/signup"); }}>Get Started</button>
           </div>
