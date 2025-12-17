@@ -30,9 +30,10 @@ ExpenseAI is a modern, AI-powered expense tracking application designed to help 
 ## 🛠️ Technology Stack
 
 ### Frontend
-- **Framework**: React 18 + Vite  
+- **Framework**: React 19 + Vite  
 - **State Management**: Redux Toolkit  
-- **Styling**: TailwindCSS + Headless UI  
+- **Styling**: TailwindCSS + Headless UI
+- **AI integration**: FastApi + Pandas + Scikit-learn (Random-Forest)
 - **Charts & Analytics**: Recharts  
 - **Form Handling**: Formik with Yup validation  
 - **HTTP Client**: Axios with interceptors  
@@ -56,10 +57,8 @@ ExpenseAI is a modern, AI-powered expense tracking application designed to help 
 ---
 
 ## 🚀 Technical Achievements
-- Secure cross-origin authentication between Vercel (frontend) and Railway (backend)  
-- Real-time data synchronization using WebSockets  
+- Secure cross-origin authentication between Vercel (frontend) and Railway (backend)   
 - Performance optimization using code splitting and lazy loading  
-- Server-side rendering (SSR) for improved SEO  
 - Comprehensive error tracking and logging  
 
 ---
@@ -71,7 +70,6 @@ ExpenseAI is a modern, AI-powered expense tracking application designed to help 
 - **Comprehensive Testing**: 90%+ test coverage  
 - **Accessibility**: WCAG 2.1 AA compliant  
 
----
 
 ## 🔗 Project Links
 - **Live Demo**: [ExpenseAI Demo](https://expense-tracker-glpp.vercel.app)  
