@@ -102,7 +102,7 @@ const SignupPage = ({ onNavigateLogin, onNavigateLanding }) => {
   async function continueWithGoogle() {
     window.location.href = `${
       import.meta.env.PROD
-        ? 'https://expense-tracker-production-2bb8.up.railway.app'
+        ? 'https://expense-tracker-production-72a7.up.railway.app/'
         : 'http://localhost:4000'
     }/api/users/auth/google`
   }
@@ -181,3 +181,4 @@ const SignupPage = ({ onNavigateLogin, onNavigateLanding }) => {
 }
 
 export default SignupPage
+
