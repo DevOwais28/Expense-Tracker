@@ -9,7 +9,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: `https://expense-tracker-production-2bb8.up.railway.app/api/users/auth/google/callback`,
+      callbackURL: `https://expense-tracker-production-ae3b.up.railway.app/api/users/auth/google/callback`,
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -57,4 +57,5 @@ passport.deserializeUser(async (id, done) => {
 
 // Export for ES modules
 export default passport;
+
 
