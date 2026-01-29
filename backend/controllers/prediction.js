@@ -16,7 +16,7 @@ export async function callFastAPI(expenseData) {
       response = await axios.post("http://localhost:8000/predict", dataToSend);
     } catch (localError) {
       // If local fails, try Railway
-      response = await axios.post("https://expense-tracker-production-ae3b.up.railway.app/predict", dataToSend);
+      response = await axios.post("expense-tracker-production-c1dc.up.railway.app/predict", dataToSend);
     }
     return response.data; // returns { predictions: [...] }
   } catch (error) {
@@ -55,6 +55,7 @@ export async function callFastAPI(expenseData) {
     };
   }
 }
+
 
 
 
