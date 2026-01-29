@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: import.meta.env.PROD ? "expense-tracker-production-d7b0.up.railway.app/api/" : "http://localhost:4000/api/",
+    baseURL: import.meta.env.PROD ? "https://expense-tracker-production-d7b0.up.railway.app/api/" : "http://localhost:4000/api/",
     withCredentials: true,
 });
 
@@ -48,5 +48,6 @@ export const apiRequest = async (
       throw error;
     }
 };
+
 
 
